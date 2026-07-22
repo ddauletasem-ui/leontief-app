@@ -118,8 +118,20 @@ with st.sidebar:
 @st.cache_data
 def load_data(file_bytes, sheet_L, sheet_V, r1, r2, c1, c2, nc, vr, xr):
     import io
-    df_L  = pd.read_excel(io.BytesIO(file_bytes), sheet_name=sheet_L, header=None, engine='openpyxl')
-    df_vx = pd.read_excel(io.BytesIO(file_bytes), sheet_name=sheet_V, header=None, engine='openpyxl')
+    from openpyxl import load_workbook
+    import numpy as np
+
+    # Читаем через openpyxl напрямую (надёжнее для сложных файлов)
+    wb = load_workbook(io.BytesIO(file_bytes), data_only=True, read_only=True)
+
+    def ws_to_df(sheet_name):
+        ws = wb[sheet_name]
+        data = [[cell.value for cell in row] for row in ws.iter_rows()]
+        return pd.DataFrame(data)
+
+    df_L  = ws_to_df(sheet_L)
+    df_vx = ws_to_df(sheet_V)
+    wb.close()
 
     ri1 = r1-1; ri2 = r2
     ci1 = c1-1; ci2 = c2
