@@ -153,6 +153,7 @@ def load_data(file_bytes, sheet_L, sheet_V, r1, r2, c1, c2, nc, vr, xr):
 # ══════════════════════════════════════════════════════
 if uploaded and run:
     try:
+        uploaded.seek(0)
         file_bytes = uploaded.read()
         names, L, X_base, vds, v, gdp_m, n = load_data(
             file_bytes, sheet_L, sheet_V,
