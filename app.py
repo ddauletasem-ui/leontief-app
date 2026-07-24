@@ -153,7 +153,6 @@ def load_data(file_bytes, sheet_L, sheet_V, r1, r2, c1, c2, nc, vr, xr):
 # ══════════════════════════════════════════════════════
 if uploaded and run:
     try:
-        uploaded.seek(0)
         file_bytes = uploaded.read()
         names, L, X_base, vds, v, gdp_m, n = load_data(
             file_bytes, sheet_L, sheet_V,
@@ -348,7 +347,7 @@ if 'model' in st.session_state:
             if val < 0: return 'color: #721c24; font-weight: 600'
         return ''
 
-    styled = df_result.style.applymap(
+    styled = df_result.style.map(
         color_delta, subset=['ΔX (млрд ₸)', 'ΔX %', 'ΔВВП (млрд ₸)']
     ).format({
         'X база (млрд ₸)': '{:,.2f}',
